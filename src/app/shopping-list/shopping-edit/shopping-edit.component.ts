@@ -49,6 +49,11 @@ export class ShoppingEditComponent implements OnInit {
     form.reset();
   }
 
+  onClear(){
+    this.slForm.reset();
+    this.editModel = false;
+  }
+
   ngOnDestroy(): void {
     //Called once, before the instance is destroyed.
     //Add 'implements OnDestroy' to the class.
