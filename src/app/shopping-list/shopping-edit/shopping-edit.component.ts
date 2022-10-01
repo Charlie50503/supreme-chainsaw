@@ -17,14 +17,14 @@ import { ShoppingListService } from '../shopping-list.service';
 export class ShoppingEditComponent implements OnInit {
   @ViewChild('f') slForm:NgForm;
   subscription:Subscription;
-  editModel = false;
+  editMode = false;
   editedItemIndex: number;
   editedItem: Ingredient;
   constructor(private slService: ShoppingListService) { }
 
   ngOnInit() {
     this.subscription = this.slService.startedEditing.subscribe((index:number)=>{
-      this.editModel = true
+      this.editMode = true
       this.editedItemIndex = index
       this.editedItem = this.slService.getIngredient(index);
       this.slForm.setValue({
@@ -39,21 +39,25 @@ export class ShoppingEditComponent implements OnInit {
     const newIngredient = new Ingredient(value.name, value.amount);
 
 
-    if(this.editModel){
+    if(this.editMode){
       this.slService.updateIngredients(this.editedItemIndex,newIngredient)
     }else{
       this.slService.addIngredient(newIngredient);
     }
 
-    this.editModel = false;
+    this.editMode = false;
     form.reset();
   }
 
   onClear(){
     this.slForm.reset();
-    this.editModel = false;
+    this.editMode = false;
   }
 
+  onDelete(){
+    this.slService.deleteIngredient(this.editedItemIndex);
+    this.onClear()
+  }
   ngOnDestroy(): void {
     //Called once, before the instance is destroyed.
     //Add 'implements OnDestroy' to the class.

@@ -1,7 +1,6 @@
 import { Ingredient } from './../shared/ingredient.model';
 import { Subject } from 'rxjs';
 
-import { Ingredient } from '../shared/ingredient.model';
 
 export class ShoppingListService {
   startedEditing = new Subject<number>();
@@ -36,6 +35,11 @@ export class ShoppingListService {
     console.log("update");
 
     this.ingredients[index]=newIngredient;
+    this.ingredientsChanged.next(this.ingredients.slice())
+  }
+
+  deleteIngredient(index:number) {
+    this.ingredients.splice(index,1)
     this.ingredientsChanged.next(this.ingredients.slice())
   }
 }
