@@ -1,3 +1,4 @@
+import { Subscription } from 'rxjs';
 import {
   Component,
   OnInit,
@@ -13,10 +14,16 @@ import { ShoppingListService } from '../shopping-list.service';
   styleUrls: ['./shopping-edit.component.css']
 })
 export class ShoppingEditComponent implements OnInit {
-
+  subscription:Subscription;
+  editModel = false;
+  editedItemIndex: number;
   constructor(private slService: ShoppingListService) { }
 
   ngOnInit() {
+    this.subscription.add(this.slService.startedEditing.subscribe((index:number)=>{
+      this.editModel = true
+      this.editedItemIndex = index
+    }))
   }
 
   onAddItem(form:NgForm) {
@@ -25,4 +32,9 @@ export class ShoppingEditComponent implements OnInit {
     this.slService.addIngredient(newIngredient);
   }
 
+  ngOnDestroy(): void {
+    //Called once, before the instance is destroyed.
+    //Add 'implements OnDestroy' to the class.
+    this.subscription.unsubscribe();
+  }
 }
